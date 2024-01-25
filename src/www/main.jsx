@@ -1,7 +1,5 @@
-import { fetchEmojis } from './fetchEmojis.js';
-import { multiplex } from './multiplex.js';
-import './RawHtml.jsx';
-// import { click, mouseup } from 'delegates';
+import { fetchEmojis } from './r-and-d/fetchEmojis.js';
+import { multiplex } from '../promises/multiplex.js';
 import './style.css';
 
 function InnerHtml({ html, className = '' }) {
@@ -9,6 +7,12 @@ function InnerHtml({ html, className = '' }) {
     rawEmoji.firstChild.innerHTML = html;
     return rawEmoji;
 }
+
+const [Count, List] = multiplex(
+    fetchEmojis(), 
+    ({ length }) => EmojiCount({ count: length }), 
+    emojis => EmojiList({ emojis }),
+);
 
 function EmojiList({ emojis }) {
     return <ul>
@@ -28,12 +32,6 @@ function EmojiCount({ count }) {
     return <span>{count}</span>;
 }
 
-const [Count, List] = multiplex(
-    fetchEmojis(), 
-    ({ length }) => EmojiCount({ count: length }), 
-    emojis => EmojiList({ emojis }),
-);
-
 const App = <div>
     <header>
         <h1>{Count} emojis for all my friends</h1>
@@ -43,11 +41,6 @@ const App = <div>
         <h2>Amazing Emoji List</h2>
         {List}
     </main>
-
 </div>;
 
 document.body.append(App);
-
-
-
-
