@@ -15,8 +15,10 @@ export class NodeStreamToReadableStream extends ReadableStream {
 }
 
 export class TestWriter {
-    #chunks = [];
+    promise = null;
     #resolve = null;
+    #chunks = [];
+
     constructor() {
         const { promise, resolve } = Promise.withResolvers();
         this.promise = promise;
@@ -35,6 +37,5 @@ export class TestWritableStream extends WritableStream {
         const writer = new TestWriter();
         super(writer);
         this.promise = writer.promise;
-        this.chunks = writer.chunks;
     }
 }
